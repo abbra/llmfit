@@ -1,0 +1,28 @@
+Reformat every record below into the exact target layout, keeping the values verbatim and in the given order. Output only the reformatted records, nothing else.
+
+Target layout:
+  id=<id> status=<status> amount=<amount> currency=<currency> region=<region>
+
+Records to reformat:
+  id=1001 status=shipped amount=41.20 currency=EUR region=de-west
+  id=1002 status=pending amount=13.75 currency=EUR region=de-west
+  id=1003 status=shipped amount=88.00 currency=EUR region=de-east
+  id=1004 status=cancelled amount=5.50 currency=EUR region=de-east
+  id=1005 status=shipped amount=102.10 currency=EUR region=fr-north
+  id=1006 status=pending amount=27.30 currency=EUR region=fr-north
+  id=1007 status=shipped amount=64.95 currency=EUR region=fr-south
+  id=1008 status=returned amount=19.99 currency=EUR region=fr-south
+  id=1009 status=shipped amount=250.00 currency=EUR region=nl-central
+  id=1010 status=pending amount=7.45 currency=EUR region=nl-central
+  id=1011 status=shipped amount=33.33 currency=EUR region=nl-central
+  id=1012 status=cancelled amount=12.00 currency=EUR region=be-flanders
+  id=1013 status=shipped amount=45.67 currency=EUR region=be-flanders
+  id=1014 status=pending amount=98.10 currency=EUR region=be-wallonia
+  id=1015 status=shipped amount=21.00 currency=EUR region=be-wallonia
+  id=1016 status=returned amount=76.40 currency=EUR region=at-vienna
+  id=1017 status=shipped amount=15.15 currency=EUR region=at-vienna
+  id=1018 status=pending amount=59.90 currency=EUR region=at-tyrol
+  id=1019 status=shipped amount=120.00 currency=EUR region=at-tyrol
+  id=1020 status=cancelled amount=3.20 currency=EUR region=ch-zurich
+
+After the records, append a two-line summary: the total number of records and the total amount.

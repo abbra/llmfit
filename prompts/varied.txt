@@ -1,0 +1,30 @@
+We are extending an existing order-management backend. Read the constraints below carefully and then produce the code.
+
+Repository layout (already exists, do not restructure):
+- crates/api          axum HTTP layer, request/response DTOs, error mapping
+- crates/domain       pure domain types and invariants, no IO
+- crates/persistence  repository traits plus a Postgres implementation
+- crates/worker       background jobs, consumes an internal queue
+
+Coding standards that the CI enforces:
+- edition 2021, no nightly features
+- `cargo clippy --all-targets -- -D warnings` must pass
+- `cargo fmt --check` must pass
+- every public item needs a doc comment
+- errors use `thiserror` in libraries and `anyhow` only in binaries
+- no `unwrap` or `expect` outside tests
+- no `panic!`, no `todo!`, no `unimplemented!`
+
+Task one: returns intake.
+Customers can return previously ordered items. Each return request carries a customer id, an idempotency key and a list of line items. For every line item we call an upstream returns service to read its current return status, then persist an enriched record that the order overview can read later. A single request can contain many items. Expected per-item failures (item not found, item not returnable, upstream rate limit) must be recorded per item and must not fail the request. Only technical errors, such as a transport failure or an unexpected upstream status code, may abort the whole request.
+
+Task two: idempotency.
+The same idempotency key may arrive more than once because clients retry. The first attempt wins. A repeated attempt must return the previously stored outcome rather than re-calling the upstream service. Decide where the idempotency check belongs, justify it in one paragraph, and implement it so that a concurrent duplicate cannot create two records.
+
+Task three: observability.
+Every log line that concerns a single line item must carry the return request id and the line item id as structured fields. Add a counter for accepted items and a counter for each expected failure class. Do not log the raw upstream payload at info level.
+
+Task four: testing.
+Cover the happy path, the partial-failure path, the idempotent-replay path and the technical-abort path. Use a trait-based fake for the upstream client so no network is involved. Keep the tests deterministic.
+
+Deliverable: a single new crate plus the minimal edits to existing crates, with a short explanation of the tradeoffs you chose, especially around the idempotency boundary and the failure taxonomy. Prefer boring, explicit code over clever abstractions. Call out any assumption you had to make because the brief was ambiguous.
